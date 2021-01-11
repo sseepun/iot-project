@@ -2,12 +2,21 @@
 
 (function() {
 
-  var socket = io();
+    var socket = io();
 
-  socket.on('connect', onConnect);
+    socket.on('connect', function(){
+        console.log('Connect ' + socket.id);
+    });
+    socket.on('update-value', function(data){
+        $('p').append('<br>'+data.value);
+    });
 
-  function onConnect(){
-    console.log('connect ' + socket.id);
-  }
+    var input = $('input'),
+        button = $('button');
+    button.click(function(e){
+        e.preventDefault();
+        socket.emit('add-value', {value: input.val()});
+        input.val('');
+    });
 
 })();
